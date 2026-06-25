@@ -1,0 +1,9 @@
+@using asnet.Models.ViewModels
+@model CarUpdateVM
+
+<form asp-action="Update" method="post">
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="Model" />
+    <span asp-validation-for="Model"></span>
+    <button type="submit">Update</button>
+</form>
