@@ -1,0 +1,12 @@
+@model List<Reservation>
+
+<ul>
+    @foreach (Reservation reservation in Model)
+    {
+        <li>
+            <a asp-action="Details" asp-route-id="@reservation.Id">
+                @reservation.CarId @reservation.CustomerId @reservation.StartDate @reservation.EndDate
+            </a>
+        </li>
+    }
+</ul>
