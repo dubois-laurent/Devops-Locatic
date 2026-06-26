@@ -1,0 +1,15 @@
+@using aspnet.Models.ViewModels
+@model CarCustomerUpdateVM
+
+<form asp-action="Update" method="post">
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="FirstName" />
+    <span asp-validation-for="FirstName"></span>
+    <input asp-for="LastName" />
+    <span asp-validation-for="LastName"></span>
+    <input asp-for="Email" />
+    <span asp-validation-for="Email"></span>
+    <input asp-for="PhoneNumber" />
+    <span asp-validation-for="PhoneNumber"></span>
+    <button type="submit">Update</button>
+</form>
