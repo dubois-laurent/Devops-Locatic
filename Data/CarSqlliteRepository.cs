@@ -1,5 +1,6 @@
 using aspnet.Interfaces;
 using aspnet.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace aspnet.Data
 {
@@ -12,7 +13,9 @@ namespace aspnet.Data
             _context = context;
         }
 
-        public IEnumerable<Car> Cars => _context.Cars;
+        public IEnumerable<Car> Cars => _context.Cars
+            .Include(c => c.CarModel)
+                .ThenInclude(m => m.CarBrand);
 
         public bool Add(Car car)
         {
