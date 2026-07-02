@@ -1,7 +1,18 @@
+using aspnet.Data;
+using aspnet.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=locationvoiture.db"));
+builder.Services.AddScoped<ICarBrandRepository, CarBrandSqlliteRepository>();
+builder.Services.AddScoped<ICarModelRepository, CarModelSqlliteRepository>();
+builder.Services.AddScoped<ICarRepository, CarSqlliteRepository>();
+builder.Services.AddScoped<ICarCustomerRepository, CarCustomerSqlliteRepository>();
+builder.Services.AddScoped<ICarReservationRepository, CarReservationSqlliteRepository>();
 
 var app = builder.Build();
 

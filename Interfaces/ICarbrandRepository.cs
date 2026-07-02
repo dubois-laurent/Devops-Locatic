@@ -1,11 +1,13 @@
+using aspnet.Models;
+
 namespace aspnet.Data
 {
-    public interface ICarbrandRepository
+    public interface ICarBrandRepository
     {
-        public IEnumerable<Carbrand> Brands { get; }
-        public bool Add(Carbrand brand);
-        public bool Update(Carbrand brand);
-        public bool Delete(Carbrand brand);
+        public IEnumerable<CarBrand> Brands { get; }
+        public bool Add(CarBrand brand);
+        public bool Update(CarBrand brand);
+        public bool Delete(CarBrand brand);
         public List<string> GetAllBrands();
     }
 }

@@ -1,11 +1,8 @@
-@using aspnet.Models.ViewModels
 @model CarCustomerCreateVM
 
 <form asp-action="Create" method="post">
-    <input asp-for="FirstName" />
-    <span asp-validation-for="FirstName"></span>
-    <input asp-for="LastName" />
-    <span asp-validation-for="LastName"></span>
+    <input asp-for="Name" />
+    <span asp-validation-for="Name"></span>
     <input asp-for="Email" />
     <span asp-validation-for="Email"></span>
     <input asp-for="PhoneNumber" />

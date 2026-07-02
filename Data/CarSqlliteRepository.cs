@@ -12,63 +12,37 @@ namespace aspnet.Data
             _context = context;
         }
 
-        public IEnumerable<Car> Cars() {
-            get => _context.Cars;
-        }
+        public IEnumerable<Car> Cars => _context.Cars;
 
-        public bool Add(string car)
+        public bool Add(Car car)
         {
-            Car temp = new Car();
-            {
-                Name = car;
-            };
-            _context.Cars.Add(temp);
+            _context.Cars.Add(car);
             _context.SaveChanges();
             return true;
         }
 
-        public bool Add(Car car)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update(string car)
-        {
-            var temp = _context.Cars.Where(c => c.Id == car.Id).FirstOrDefault();
-            if (temp != null)
-            {
-                temp.Name = car.Name;
-                _context.SaveChanges();
-                return true;
-            }
-            return false;
-        }
-
         public bool Update(Car car)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool Delete(string car)
-        {
-            var temp = _context.Cars.Where(c => c.Id == car.Id).FirstOrDefault();
-            if (temp != null)
-            {
-                _context.Cars.Remove(temp);
-                _context.SaveChanges();
-                return true;
-            }
-            return false;
+            var existing = _context.Cars.FirstOrDefault(c => c.Id == car.Id);
+            if (existing == null) return false;
+            existing.PlateNumber = car.PlateNumber;
+            existing.CarModelId = car.CarModelId;
+            _context.SaveChanges();
+            return true;
         }
 
         public bool Delete(Car car)
         {
-            throw new NotImplementedException();
+            var existing = _context.Cars.FirstOrDefault(c => c.Id == car.Id);
+            if (existing == null) return false;
+            _context.Cars.Remove(existing);
+            _context.SaveChanges();
+            return true;
         }
 
-        public List<string> GetAllBrands()
+        public List<Car> GetAllCars()
         {
-            return _context.CarBrands.Select(b => b.Name).ToList();
+            return _context.Cars.ToList();
         }
     }
 }

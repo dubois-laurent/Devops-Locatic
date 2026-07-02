@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using locationvoiture.Models;
+using aspnet.Models;
 
-namespace locationvoiture.Controllers;
+namespace aspnet.Controllers;
 
 public class HomeController : Controller
 {

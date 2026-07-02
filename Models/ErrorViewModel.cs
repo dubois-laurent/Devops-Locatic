@@ -1,4 +1,4 @@
-namespace locationvoiture.Models;
+namespace aspnet.Models;
 
 public class ErrorViewModel
 {

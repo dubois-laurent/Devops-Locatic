@@ -9,13 +9,6 @@ namespace aspnet.Controllers
     {
         private readonly ILogger<CarController> _logger;
         private readonly ICarRepository _repository;
-        private List<Car> _cars
-        {
-            get
-            {
-                return _repository.GetAllCars();
-            }
-        }
 
         public CarController(ILogger<CarController> logger, ICarRepository repository)
         {
@@ -25,7 +18,7 @@ namespace aspnet.Controllers
 
         public IActionResult Index()
         {
-            var cars = _repository.GetAllCars();
+            var cars = _repository.Cars;
             return View(cars);
         }
 
@@ -35,55 +28,46 @@ namespace aspnet.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Car car)
+        public IActionResult Create(CarCreateVM car)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return View(car);
-            _repository.Add(new Car() { Name = car.Name, BrandId = car.BrandId, PricePerDay = car.PricePerDay });
-            _logger.Log(LogLevel.Debug, car.Name + " created");
-
+            _repository.Add(new Car() { CarModelId = car.CarModelId, PlateNumber = car.PlateNumber });
+            _logger.Log(LogLevel.Debug, car.PlateNumber + " created");
             return RedirectToAction("Index");
         }
 
-        public IActionResult Update(int id, Car car)
+        public IActionResult Update(int id)
         {
-            if (ModelState.IsValid)
-                return View(car);
-            _repository.Update(car);
-            _logger.Log(LogLevel.Debug, car.Name + " updated");
-
-            return RedirectToAction("Index");
+            var car = _repository.Cars.FirstOrDefault(c => c.Id == id);
+            if (car == null) return NotFound();
+            return View(new CarUpdateVM { Id = car.Id, CarModelId = car.CarModelId, PlateNumber = car.PlateNumber });
         }
 
         [HttpPost]
-        public IActionResult Update(Car car)
+        public IActionResult Update(CarUpdateVM car)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return View(car);
-            _repository.Update(car);
-            _logger.Log(LogLevel.Debug, car.Name + " updated");
-
+            _repository.Update(new Car() { Id = car.Id, CarModelId = car.CarModelId, PlateNumber = car.PlateNumber });
+            _logger.Log(LogLevel.Debug, car.PlateNumber + " updated");
             return RedirectToAction("Index");
         }
 
-        public IActionResult Delete(int id, Car car)
+        public IActionResult Delete(int id)
         {
-            if (ModelState.IsValid)
-                return View(car);
-            _repository.Delete(car);
-            _logger.Log(LogLevel.Debug, car.Name + " deleted");
-
-            return RedirectToAction("Index");
+            var car = _repository.Cars.FirstOrDefault(c => c.Id == id);
+            if (car == null) return NotFound();
+            return View(new CarDeleteVM { Id = car.Id });
         }
 
-        [HttpPost]
-        public IActionResult Delete(int id, Car car)
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeleteConfirmed(int id)
         {
-            if (ModelState.IsValid)
-                return View(car);
+            var car = _repository.Cars.FirstOrDefault(c => c.Id == id);
+            if (car == null) return NotFound();
             _repository.Delete(car);
-            _logger.Log(LogLevel.Debug, car.Name + " deleted");
-
+            _logger.Log(LogLevel.Debug, car.PlateNumber + " deleted");
             return RedirectToAction("Index");
         }
     }

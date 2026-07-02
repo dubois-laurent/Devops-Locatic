@@ -1,11 +1,13 @@
+using aspnet.Models;
+
 namespace aspnet.Data
 {
     public interface ICarModelRepository
     {
-        public IEnumerable<Carmodel> Models { get; }
-        public bool Add(Carmodel model);
-        public bool Update(Carmodel model);
-        public bool Delete(Carmodel model);
+        public IEnumerable<CarModel> Models { get; }
+        public bool Add(CarModel model);
+        public bool Update(CarModel model);
+        public bool Delete(CarModel model);
         public List<string> GetAllModels();
     }
 }

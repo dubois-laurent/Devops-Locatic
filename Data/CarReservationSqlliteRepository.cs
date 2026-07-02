@@ -1,3 +1,5 @@
+using aspnet.Models;
+
 namespace aspnet.Data
 {
     public class CarReservationSqlliteRepository : ICarReservationRepository
@@ -9,63 +11,39 @@ namespace aspnet.Data
             _context = context;
         }
 
-        public IEnumerable<CarReservation> CarReservations() {
-            get => _context.CarReservations;
-        }
+        public IEnumerable<CarReservation> Reservations => _context.CarReservations;
 
-        public bool Add(string reservation)
+        public bool Add(CarReservation reservation)
         {
-            CarReservation temp = new CarReservation();
-            {
-                Name = reservation;
-            };
-            _context.CarReservations.Add(temp);
+            _context.CarReservations.Add(reservation);
             _context.SaveChanges();
             return true;
         }
 
-        public bool Add(CarReservation reservation)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update(string reservation)
-        {
-            var temp = _context.CarReservations.Where(r => r.Id == reservation.Id).FirstOrDefault();
-            if (temp != null)
-            {
-                temp.Name = reservation.Name;
-                _context.SaveChanges();
-                return true;
-            }
-            return false;
-        }
-
         public bool Update(CarReservation reservation)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool Delete(string reservation)
-        {
-            var temp = _context.CarReservations.Where(r => r.Id == reservation.Id).FirstOrDefault();
-            if (temp != null)
-            {
-                _context.CarReservations.Remove(temp);
-                _context.SaveChanges();
-                return true;
-            }
-            return false;
+            var existing = _context.CarReservations.FirstOrDefault(r => r.Id == reservation.Id);
+            if (existing == null) return false;
+            existing.StartDate = reservation.StartDate;
+            existing.EndDate = reservation.EndDate;
+            existing.CarId = reservation.CarId;
+            existing.CarCustomerId = reservation.CarCustomerId;
+            _context.SaveChanges();
+            return true;
         }
 
         public bool Delete(CarReservation reservation)
         {
-            throw new NotImplementedException();
+            var existing = _context.CarReservations.FirstOrDefault(r => r.Id == reservation.Id);
+            if (existing == null) return false;
+            _context.CarReservations.Remove(existing);
+            _context.SaveChanges();
+            return true;
         }
 
         public List<string> GetAllReservations()
         {
-            return _context.CarReservations.Select(r => r.Name).ToList();
+            return _context.CarReservations.Select(r => r.Id.ToString()).ToList();
         }
     }
 }

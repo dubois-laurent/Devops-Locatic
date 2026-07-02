@@ -2,8 +2,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace aspnet.Models.ViewModels
 {
-    public class CarCreateVM
+    public class CarUpdateVM
     {
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "La plaque d'immatriculation est obligatoire.")]
         public string PlateNumber { get; set; } = null!;
 

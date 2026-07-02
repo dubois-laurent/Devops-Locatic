@@ -1,3 +1,5 @@
+using aspnet.Models;
+
 namespace aspnet.Data
 {
     public class CarCustomerSqlliteRepository : ICarCustomerRepository
@@ -9,58 +11,33 @@ namespace aspnet.Data
             _context = context;
         }
 
-        public IEnumerable<CarCustomer> Cars() {
-            get => _context.CarCustomers;
-        }
+        public IEnumerable<CarCustomer> Customers => _context.CarCustomers;
 
-        public bool Add(string customer)
+        public bool Add(CarCustomer customer)
         {
-            CarCustomer temp = new CarCustomer();
-            {
-                Name = customer;
-            };
-            _context.CarCustomers.Add(temp);
+            _context.CarCustomers.Add(customer);
             _context.SaveChanges();
             return true;
         }
 
-        public bool Add(CarCustomer customer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update(string customer)
-        {
-            var temp = _context.CarCustomers.Where(c => c.Id == customer.Id).FirstOrDefault();
-            if (temp != null)
-            {
-                temp.Name = customer.Name;
-                _context.SaveChanges();
-                return true;
-            }
-            return false;
-        }
-
         public bool Update(CarCustomer customer)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool Delete(string customer)
-        {
-            var temp = _context.CarCustomers.Where(c => c.Id == customer.Id).FirstOrDefault();
-            if (temp != null)
-            {
-                _context.CarCustomers.Remove(temp);
-                _context.SaveChanges();
-                return true;
-            }
-            return false;
+            var existing = _context.CarCustomers.FirstOrDefault(c => c.Id == customer.Id);
+            if (existing == null) return false;
+            existing.Name = customer.Name;
+            existing.Email = customer.Email;
+            existing.PhoneNumber = customer.PhoneNumber;
+            _context.SaveChanges();
+            return true;
         }
 
         public bool Delete(CarCustomer customer)
         {
-            throw new NotImplementedException();
+            var existing = _context.CarCustomers.FirstOrDefault(c => c.Id == customer.Id);
+            if (existing == null) return false;
+            _context.CarCustomers.Remove(existing);
+            _context.SaveChanges();
+            return true;
         }
 
         public List<string> GetAllCustomers()

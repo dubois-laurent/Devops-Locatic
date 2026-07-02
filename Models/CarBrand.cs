@@ -1,6 +1,9 @@
-public class CarBrand
+namespace aspnet.Models
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public List<CarModel> CarModels { get; set; } = new ();
+    public class CarBrand
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = null!;
+        public List<CarModel> CarModels { get; set; } = new();
+    }
 }

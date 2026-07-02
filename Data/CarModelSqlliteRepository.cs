@@ -1,3 +1,5 @@
+using aspnet.Models;
+
 namespace aspnet.Data
 {
     public class CarModelSqlliteRepository : ICarModelRepository
@@ -9,58 +11,35 @@ namespace aspnet.Data
             _context = context;
         }
 
-        public IEnumerable<CarModel> Models() {
-            get => _context.CarModels;
-        }
+        public IEnumerable<CarModel> Models => _context.CarModels;
 
-        public bool Add(string model)
+        public bool Add(CarModel model)
         {
-            CarModel temp = new CarModel();
-            {
-                Name = model;
-            };
-            _context.CarModels.Add(temp);
+            _context.CarModels.Add(model);
             _context.SaveChanges();
             return true;
         }
 
-        public bool Add(CarModel model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update(string model)
-        {
-            var temp = _context.CarModels.Where(m => m.Id == model.Id).FirstOrDefault();
-            if (temp != null)
-            {
-                temp.Name = model.Name;
-                _context.SaveChanges();
-                return true;
-            }
-            return false;
-        }
-
         public bool Update(CarModel model)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool Delete(string model)
-        {
-            var temp = _context.CarModels.Where(m => m.Id == model.Id).FirstOrDefault();
-            if (temp != null)
-            {
-                _context.CarModels.Remove(temp);
-                _context.SaveChanges();
-                return true;
-            }
-            return false;
+            var existing = _context.CarModels.FirstOrDefault(m => m.Id == model.Id);
+            if (existing == null) return false;
+            existing.Name = model.Name;
+            existing.DailyPrice = model.DailyPrice;
+            existing.NbSeats = model.NbSeats;
+            existing.FuelType = model.FuelType;
+            existing.CarBrandId = model.CarBrandId;
+            _context.SaveChanges();
+            return true;
         }
 
         public bool Delete(CarModel model)
         {
-            throw new NotImplementedException();
+            var existing = _context.CarModels.FirstOrDefault(m => m.Id == model.Id);
+            if (existing == null) return false;
+            _context.CarModels.Remove(existing);
+            _context.SaveChanges();
+            return true;
         }
 
         public List<string> GetAllModels()

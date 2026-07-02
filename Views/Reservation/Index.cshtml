@@ -1,11 +1,11 @@
-@model List<Reservation>
+@model IEnumerable<CarReservation>
 
 <ul>
-    @foreach (Reservation reservation in Model)
+    @foreach (CarReservation reservation in Model)
     {
         <li>
             <a asp-action="Details" asp-route-id="@reservation.Id">
-                @reservation.CarId @reservation.CustomerId @reservation.StartDate @reservation.EndDate
+                @reservation.CarId @reservation.CarCustomerId @reservation.StartDate @reservation.EndDate
             </a>
         </li>
     }

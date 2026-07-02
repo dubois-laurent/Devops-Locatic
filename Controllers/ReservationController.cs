@@ -1,4 +1,5 @@
 using aspnet.Data;
+using aspnet.Models;
 using aspnet.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +18,7 @@ namespace aspnet.Controllers
 
         public IActionResult Index()
         {
-            var reservations = _repository.GetAllReservations();
+            var reservations = _repository.Reservations;
             return View(reservations);
         }
 
@@ -27,59 +28,46 @@ namespace aspnet.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CarReservation reservation)
+        public IActionResult Create(CarReservationCreateVM reservation)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return View(reservation);
-            _repository.Add(new CarReservation() { CustomerId = reservation.CustomerId, CarId = reservation.CarId, StartDate = reservation.StartDate, EndDate = reservation.EndDate });
-            _logger.Log(LogLevel.Debug, reservation.CustomerId + " created");
-
+            _repository.Add(new CarReservation() { CarId = reservation.CarId, CarCustomerId = reservation.CustomerId, StartDate = reservation.StartDate, EndDate = reservation.EndDate });
+            _logger.Log(LogLevel.Debug, reservation.CarId + " created");
             return RedirectToAction("Index");
         }
 
-        public IActionResult Update(int id, CarReservation reservation)
+        public IActionResult Update(int id)
         {
-            if (ModelState.IsValid)
-                return View(reservation);
-            _repository.Update(reservation);
-            _logger.Log(LogLevel.Debug, reservation.CustomerId + " updated");
-
-            return RedirectToAction("Index");
+            var reservation = _repository.Reservations.FirstOrDefault(r => r.Id == id);
+            if (reservation == null) return NotFound();
+            return View(new CarReservationUpdateVM { Id = reservation.Id, CarId = reservation.CarId, CustomerId = reservation.CarCustomerId, StartDate = reservation.StartDate, EndDate = reservation.EndDate });
         }
 
         [HttpPost]
-        public IActionResult Update(CarReservation reservation)
+        public IActionResult Update(CarReservationUpdateVM reservation)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return View(reservation);
-            _repository.Update(reservation);
-            _logger.Log(LogLevel.Debug, reservation.CustomerId + " updated");
-
+            _repository.Update(new CarReservation() { Id = reservation.Id, CarId = reservation.CarId, CarCustomerId = reservation.CustomerId, StartDate = reservation.StartDate, EndDate = reservation.EndDate });
+            _logger.Log(LogLevel.Debug, reservation.CarId + " updated");
             return RedirectToAction("Index");
         }
 
         public IActionResult Delete(int id)
         {
             var reservation = _repository.Reservations.FirstOrDefault(r => r.Id == id);
-            if (reservation == null)
-                return NotFound();
-
-            _repository.Delete(reservation);
-            _logger.Log(LogLevel.Debug, reservation.CustomerId + " deleted");
-
-            return RedirectToAction("Index");
+            if (reservation == null) return NotFound();
+            return View(new CarReservationDeleteVM { Id = reservation.Id });
         }
 
-        [HttpPost]
-        public IActionResult Delete(int id)
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeleteConfirmed(int id)
         {
-            var brand = _repository.Brands.FirstOrDefault(b => b.Id == id);
-            if (brand == null)
-                return NotFound();
-
-            _repository.Delete(brand);
-            _logger.Log(LogLevel.Debug, brand.Name + " deleted");
-
+            var reservation = _repository.Reservations.FirstOrDefault(r => r.Id == id);
+            if (reservation == null) return NotFound();
+            _repository.Delete(reservation);
+            _logger.Log(LogLevel.Debug, reservation.CarId + " deleted");
             return RedirectToAction("Index");
         }
     }

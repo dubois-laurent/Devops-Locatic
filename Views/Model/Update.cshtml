@@ -1,4 +1,3 @@
-@using aspnet.Models.ViewModels
 @model CarModelUpdateVM
 
 <form asp-action="Update" method="post">
@@ -11,7 +10,7 @@
     <span asp-validation-for="NbSeats"></span>
     <input asp-for="FuelType" />
     <span asp-validation-for="FuelType"></span>
-    <input asp-for="CarBrand" />
-    <span asp-validation-for="CarBrand"></span>
+    <input asp-for="CarBrandId" />
+    <span asp-validation-for="CarBrandId"></span>
     <button type="submit">Update</button>
 </form>

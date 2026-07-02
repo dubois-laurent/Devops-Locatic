@@ -1,4 +1,3 @@
-@using aspnet.Models.ViewModels
 @model CarModelCreateVM
 
 <form asp-action="Create" method="post">
@@ -10,7 +9,7 @@
     <span asp-validation-for="NbSeats"></span>
     <input asp-for="FuelType" />
     <span asp-validation-for="FuelType"></span>
-    <intput asp-for="CarBrand" />
-    <span asp-validation-for="CarBrand"></span>
+    <input asp-for="CarBrandId" />
+    <span asp-validation-for="CarBrandId"></span>
     <button type="submit">Create</button>
 </form>

@@ -1,11 +1,11 @@
-@model List<Model>
+@model IEnumerable<CarModel>
 
 <ul>
-    @foreach (Model model in Model)
+    @foreach (CarModel carModel in Model)
     {
         <li>
-            <a asp-action="Details" asp-route-id="@model.Id">
-                @model.Name @model.DailyPrice @model.NbSeats @model.FuelType @model.CarBrand
+            <a asp-action="Details" asp-route-id="@carModel.Id">
+                @carModel.Name @carModel.DailyPrice @carModel.NbSeats @carModel.FuelType @carModel.CarBrand?.Name
             </a>
         </li>
     }

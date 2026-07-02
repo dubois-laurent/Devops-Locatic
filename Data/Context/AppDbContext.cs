@@ -7,9 +7,9 @@ public class AppDbContext : DbContext
     {
     }
 
-    public DbSet<Brand> Brands { get; set; }
-    public DbSet<Model> Models { get; set; }
+    public DbSet<CarBrand> CarBrands { get; set; }
+    public DbSet<CarModel> CarModels { get; set; }
     public DbSet<Car> Cars { get; set; }
-    public DbSet<Customer> Customers { get; set; }
-    public DbSet<Reservation> Reservations { get; set; }
+    public DbSet<CarCustomer> CarCustomers { get; set; }
+    public DbSet<CarReservation> CarReservations { get; set; }
 }

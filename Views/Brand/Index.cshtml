@@ -1,7 +1,7 @@
-@model List<Brand>
+@model IEnumerable<CarBrand>
 
 <ul>
-    @foreach (Brand brand in Model)
+    @foreach (CarBrand brand in Model)
     {
         <li>
             <a asp-action="Details" asp-route-id="@brand.Id">

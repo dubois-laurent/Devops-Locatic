@@ -1,4 +1,5 @@
 using aspnet.Data;
+using aspnet.Models;
 using aspnet.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,9 +8,9 @@ namespace aspnet.Controllers
     public class ModelController : Controller
     {
         private readonly ILogger<ModelController> _logger;
-        private readonly ICarmodelRepository _repository;
+        private readonly ICarModelRepository _repository;
 
-        public ModelController(ILogger<ModelController> logger, ICarmodelRepository repository)
+        public ModelController(ILogger<ModelController> logger, ICarModelRepository repository)
         {
             _logger = logger;
             _repository = repository;
@@ -17,7 +18,7 @@ namespace aspnet.Controllers
 
         public IActionResult Index()
         {
-            var models = _repository.GetAllModels();
+            var models = _repository.Models;
             return View(models);
         }
 
@@ -27,55 +28,46 @@ namespace aspnet.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Carmodel model)
+        public IActionResult Create(CarModelCreateVM model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return View(model);
-            _repository.Add(new Carmodel() { Name = model.Name, DailyPrice = model.DailyPrice, NbSeats = model.NbSeats, Fuel = model.Fuel, CarBrand = model.CarBrand });
+            _repository.Add(new CarModel() { Name = model.Name, DailyPrice = model.DailyPrice, NbSeats = model.NbSeats, FuelType = model.FuelType, CarBrandId = model.CarBrandId });
             _logger.Log(LogLevel.Debug, model.Name + " created");
-
             return RedirectToAction("Index");
         }
 
-        public IActionResult Update(int id, Carmodel model)
+        public IActionResult Update(int id)
         {
-            if (ModelState.IsValid)
-                return View(model);
-            _repository.Update(model);
-            _logger.Log(LogLevel.Debug, model.Name + " updated");
-
-            return RedirectToAction("Index");
+            var model = _repository.Models.FirstOrDefault(m => m.Id == id);
+            if (model == null) return NotFound();
+            return View(new CarModelUpdateVM { Id = model.Id, Name = model.Name, DailyPrice = model.DailyPrice, NbSeats = model.NbSeats, FuelType = model.FuelType, CarBrandId = model.CarBrandId });
         }
 
         [HttpPost]
-        public IActionResult Update(Carmodel model)
+        public IActionResult Update(CarModelUpdateVM model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return View(model);
-            _repository.Update(model);
+            _repository.Update(new CarModel() { Id = model.Id, Name = model.Name, DailyPrice = model.DailyPrice, NbSeats = model.NbSeats, FuelType = model.FuelType, CarBrandId = model.CarBrandId });
             _logger.Log(LogLevel.Debug, model.Name + " updated");
-
             return RedirectToAction("Index");
         }
 
-        public IActionResult Delete(int id, Carmodel model)
+        public IActionResult Delete(int id)
         {
-            if (ModelState.IsValid)
-                return View(model);
-            _repository.Delete(model);
-            _logger.Log(LogLevel.Debug, model.Name + " deleted");
-
-            return RedirectToAction("Index");
+            var model = _repository.Models.FirstOrDefault(m => m.Id == id);
+            if (model == null) return NotFound();
+            return View(new CarModelDeleteVM { Id = model.Id });
         }
 
-        [HttpPost]
-        public IActionResult Delete(Carmodel model)
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeleteConfirmed(int id)
         {
-            if (ModelState.IsValid)
-                return View(model);
+            var model = _repository.Models.FirstOrDefault(m => m.Id == id);
+            if (model == null) return NotFound();
             _repository.Delete(model);
             _logger.Log(LogLevel.Debug, model.Name + " deleted");
-
             return RedirectToAction("Index");
         }
     }

@@ -2,8 +2,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace aspnet.Models.ViewModels
 {
-    public class CarCustomerCreateVM
+    public class CarCustomerUpdateVM
     {
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "Le nom est obligatoire.")]
         public string Name { get; set; } = null!;
 

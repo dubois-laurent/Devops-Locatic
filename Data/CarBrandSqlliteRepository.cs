@@ -1,3 +1,5 @@
+using aspnet.Models;
+
 namespace aspnet.Data
 {
     public class CarBrandSqlliteRepository : ICarBrandRepository
@@ -9,58 +11,31 @@ namespace aspnet.Data
             _context = context;
         }
 
-        public IEnumerable<CarBrand> Brands() {
-            get => _context.CarBrands;
-        }
+        public IEnumerable<CarBrand> Brands => _context.CarBrands;
 
-        public bool Add(string brand)
+        public bool Add(CarBrand brand)
         {
-            CarBrand temp = new CarBrand();
-            {
-                Name = brand;
-            };
-            _context.CarBrands.Add(temp);
+            _context.CarBrands.Add(brand);
             _context.SaveChanges();
             return true;
         }
 
-        public bool Add(CarBrand brand)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update(string brand)
-        {
-            var temp = _context.CarBrands.Where(b => b.Id == brand.Id).FirstOrDefault();
-            if (temp != null)
-            {
-                temp.Name = brand.Name;
-                _context.SaveChanges();
-                return true;
-            }
-            return false;
-        }
-
         public bool Update(CarBrand brand)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool Delete(string brand)
-        {
-            var temp = _context.CarBrands.Where(b => b.Id == brand.Id).FirstOrDefault();
-            if (temp != null)
-            {
-                _context.CarBrands.Remove(temp);
-                _context.SaveChanges();
-                return true;
-            }
-            return false;
+            var existing = _context.CarBrands.FirstOrDefault(b => b.Id == brand.Id);
+            if (existing == null) return false;
+            existing.Name = brand.Name;
+            _context.SaveChanges();
+            return true;
         }
 
         public bool Delete(CarBrand brand)
         {
-            throw new NotImplementedException();
+            var existing = _context.CarBrands.FirstOrDefault(b => b.Id == brand.Id);
+            if (existing == null) return false;
+            _context.CarBrands.Remove(existing);
+            _context.SaveChanges();
+            return true;
         }
 
         public List<string> GetAllBrands()

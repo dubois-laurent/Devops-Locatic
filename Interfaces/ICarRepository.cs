@@ -8,6 +8,6 @@ namespace aspnet.Interfaces
         public bool Add(Car car);
         public bool Update(Car car);
         public bool Delete(Car car);
-        public List<string> GetAllCars();
+        public List<Car> GetAllCars();
     }
 }
